@@ -4,6 +4,7 @@ import './App.css'
 import DuckItem from './DuckItem'
 import { ducks } from './demo'
 import axios, { Axios } from 'axios';
+import { Header, List } from 'semantic-ui-react';
 
 function App() {
 
@@ -20,13 +21,13 @@ function App() {
 
   return (
     <div>
-    <h1>Reactivities</h1>
+    <Header as="h2" icon="users" content="Reactivities"/>
     //apply to each duck in the array
     {ducks.map(duck=>(<DuckItem duck={duck}/>))}
 
-    <ul>
-      {activities.map((activity:any)=>(<li key={activity.id}>{activity.title}</li>))}
-    </ul>
+    <List>
+      {activities.map((activity:any)=>(<List.Item key={activity.id}>{activity.title}</List.Item>))}
+    </List>
     </div>
   )
 }
