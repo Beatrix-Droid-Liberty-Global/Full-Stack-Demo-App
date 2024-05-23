@@ -25,7 +25,7 @@ function App() {
     {ducks.map(duck=>(<DuckItem duck={duck}/>))}
 
     <ul>
-      {activities.map((activity:any)=>(<li key={activity.id}></li>))}
+      {activities.map((activity:any)=>(<li key={activity.id}>{activity.title}</li>))}
     </ul>
     </div>
   )
