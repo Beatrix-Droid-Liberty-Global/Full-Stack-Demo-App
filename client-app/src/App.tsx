@@ -8,8 +8,11 @@ import { Header, List } from 'semantic-ui-react';
 
 function App() {
 
-  //from axios usestate, useffect hooks get request from api with this
-  const [activities,setActivities]=useState([]);
+//from axios usestate, useffect hooks get request from api with this
+//this line initializes a state variable activities with an empty array as its initial value.
+//setActivities is a function that will update the activities state.
+
+const [activities,setActivities]=useState([]);
   
   //accepts a function
   useEffect(()=>

@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));  //tell program about db
 builder.Services.AddCors(opt=>
 { opt.AddPolicy("CorsPolicy", policy=>{policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://127.0.0.1:3000");});});  // allow any policy
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Application.Activities.List).Assembly));  ///add mediator that allows one to talk to the api and send and receive data from it
 
 
 var app = builder.Build();
