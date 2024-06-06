@@ -1,6 +1,8 @@
 
+using API.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));  //tell program about db
-builder.Services.AddCors(opt=>
-{ opt.AddPolicy("CorsPolicy", policy=>{policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://127.0.0.1:3000");});});  // allow any policy
-builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Application.Activities.List).Assembly));  ///add mediator that allows one to talk to the api and send and receive data from it
+builder.Services.AddApplicationServices(builder.Configuration);
 
 
 var app = builder.Build();
