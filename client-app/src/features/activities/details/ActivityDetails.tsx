@@ -6,7 +6,8 @@ import { Activity } from "../../../app/layout/interfaces/Activity";
 interface Props
 {
     activity: Activity,
-    cancelSelectActivity: () => void
+    cancelSelectActivity: () => void,
+    openForm:(id:string)=>void;
 }
 
 
@@ -27,7 +28,7 @@ export default function ActivityDetails(props:Props)
         </Card.Content>
         <Card.Content extra>
           <Button.Group widths="2">
-              <Button basic color="blue" content="Edit"/>
+              <Button basic color="blue" content="Edit"  onClick={()=>props.openForm(props.activity.id)}/>
               <Button basic color="grey" content="Cancel" onClick={()=>props.cancelSelectActivity()}/>
           </Button.Group>
         </Card.Content>

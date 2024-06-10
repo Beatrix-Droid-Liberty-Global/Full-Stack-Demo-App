@@ -18,6 +18,7 @@ function App() {
 
 const [activities,setActivities]=useState<Activity[]>([]);
 const [selectedActivity, setselectedActivity]=useState<Activity| undefined>(undefined);
+const [editMode, setEditMode]=useState(false);
   
   //accepts a function
   useEffect(()=>
@@ -26,23 +27,45 @@ const [selectedActivity, setselectedActivity]=useState<Activity| undefined>(unde
       axios.get<Activity[]>("http://localhost:5000/api/activities").then(response =>{setActivities(response.data)})
     },[])
 
+   
     function handleSelectActivity(id:string)
     {
       setselectedActivity(activities.find(activityobject=>activityobject.id===id))
     }
+   
     function handleCanceledSelectActivity()
     {
       setselectedActivity(undefined);
     }
+    
+    //if id is not null then handleselect activity. else cancel the activity
+    function handleFormOpen(id?:string)
+    {
+      id ? handleSelectActivity(id):handleCanceledSelectActivity();
+      setEditMode(true);
+    }
+
+    function handleFormClose()
+    {
+      setEditMode(false);
+    }
 
   return (
     <Fragment>
-  <Navbar/> //imported from navbar.tsx
+  <Navbar  openForm={handleFormOpen}/> //imported from navbar.tsx
     //apply to each duck in the array
 
 <Container style={{marginTop:"7em"}}>
 {ducks.map(duck=>(<DuckItem duck={duck}/>))}
-    <ActivityDashboard activities={activities} selectedActivity={selectedActivity}  selectActivity={handleSelectActivity}  cancelSelectActivity={handleCanceledSelectActivity}/>
+    <ActivityDashboard 
+    activities={activities} 
+    selectedActivity={selectedActivity}
+    selectActivity={handleSelectActivity}  
+    cancelSelectActivity={handleCanceledSelectActivity}
+    editMode={editMode}
+    openForm={handleFormOpen}
+    closeForm={handleFormClose}
+    />
     </Container>
     </Fragment>
   )
