@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Activity } from "../app/layout/interfaces/Activity";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 
@@ -7,7 +7,7 @@ interface Props
 {
     activities: Activity[]
     selectActivity: (id: string) => void,
-
+    deleteActivity:(id:string) => void
 
 }
 
@@ -27,8 +27,9 @@ export default function ActivityList(props: Props)
                                 </Item.Description>
 
                                 <Item.Extra> 
-                                    <Button floated="right" content="View" colour="blue" onClick={()=>props.selectActivity(activity.id)}/>
-                                    <Label basic coontent={activity.category}></Label>
+                                    <Button floated="right" content="View" color="blue" onClick={()=>props.selectActivity(activity.id)}/>
+                                    
+                                    <Button floated="right" content="Delete" color="red" onClick={()=>props.deleteActivity(activity.id)}/><Label basic coontent={activity.category}></Label>
                                 </Item.Extra>
 
                             </Item.Content>

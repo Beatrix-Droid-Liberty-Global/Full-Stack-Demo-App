@@ -2,12 +2,12 @@
 import { Fragment, useEffect, useState } from 'react';
 import DuckItem from './DuckItem.tsx'
 import { ducks } from './demo'
-import axios, { Axios } from 'axios';
-import { Container, Header, List } from 'semantic-ui-react';
+import axios from 'axios';
+import { Container} from 'semantic-ui-react';
 import type {Activity} from './interfaces/Activity';
 import Navbar from './navbar.tsx';
 import ActivityDashboard from '../../features/activities/dashboard/ActivitiesDashboard.tsx';
-
+import {v4 as uuid} from 'uuid'
 
 
 function App() {
@@ -37,7 +37,7 @@ const [editMode, setEditMode]=useState(false);
     {
       setselectedActivity(undefined);
     }
-    
+
     //if id is not null then handleselect activity. else cancel the activity
     function handleFormOpen(id?:string)
     {
@@ -49,6 +49,21 @@ const [editMode, setEditMode]=useState(false);
     {
       setEditMode(false);
     }
+
+    function handleCreateOrEditActivity(activity:Activity)
+    {
+      activity.id? setActivities([...activities.filter(x=>x.id !== activity.id), {...activity, id:uuid()}]) // check whether activity has id that is not undefined, and then filkters out any existing activity withe the same id. it then adds the new activity object ti the new array
+      :setActivities([...activities, activity])
+      setEditMode(false)
+      setselectedActivity(activity)
+    }
+
+
+    function handleDeleteActivity(id:string)
+    {
+      setActivities([...activities.filter(x => x.id!==id)])
+    }
+
 
   return (
     <Fragment>
@@ -65,6 +80,8 @@ const [editMode, setEditMode]=useState(false);
     editMode={editMode}
     openForm={handleFormOpen}
     closeForm={handleFormClose}
+    createOrEdit={handleCreateOrEditActivity}
+    deleteActivity={handleDeleteActivity}
     />
     </Container>
     </Fragment>
