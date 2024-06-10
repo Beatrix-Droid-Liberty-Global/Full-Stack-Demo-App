@@ -3,6 +3,7 @@ import { Grid, List } from "semantic-ui-react";
 import { Activity } from "../../../app/layout/interfaces/Activity";
 import ActivityList from "../../ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
+import ActivityForm from "../form/ActivityForm";
 
 
 
@@ -10,6 +11,9 @@ import ActivityDetails from "../details/ActivityDetails";
 interface Props
 {
     activities: Activity[]
+    selectedActivity: Activity| undefined,
+    selectActivity: (id: string) => void,
+    cancelSelectActivity: () => void
 }
 
 
@@ -21,13 +25,13 @@ export default function ActivityDashboard(props:Props)
     return( 
     <Grid>
         <Grid.Column width="10">
-            <ActivityList activities={props.activities}/>
+            <ActivityList activities={props.activities} selectActivity={props.selectActivity}/>
         </Grid.Column>
         <Grid.Column width="6">   
 
-            {props.activities[0] &&     
-            <ActivityDetails activity={props.activities[0]}/>}
-
+            {props.selectedActivity &&     
+            <ActivityDetails activity={props.selectedActivity} cancelSelectActivity={props.cancelSelectActivity}/>}
+            <ActivityForm/>
         </Grid.Column>
     </Grid> 
     )

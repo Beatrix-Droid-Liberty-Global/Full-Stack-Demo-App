@@ -5,7 +5,8 @@ import { Activity } from "../../../app/layout/interfaces/Activity";
 
 interface Props
 {
-    activity: Activity
+    activity: Activity,
+    cancelSelectActivity: () => void
 }
 
 
@@ -27,7 +28,7 @@ export default function ActivityDetails(props:Props)
         <Card.Content extra>
           <Button.Group widths="2">
               <Button basic color="blue" content="Edit"/>
-              <Button basic color="grey" content="Cancel"/>
+              <Button basic color="grey" content="Cancel" onClick={()=>props.cancelSelectActivity()}/>
           </Button.Group>
         </Card.Content>
       </Card>

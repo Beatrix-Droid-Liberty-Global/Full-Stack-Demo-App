@@ -17,6 +17,7 @@ function App() {
 //setActivities is a function that will update the activities state.
 
 const [activities,setActivities]=useState<Activity[]>([]);
+const [selectedActivity, setselectedActivity]=useState<Activity| undefined>(undefined);
   
   //accepts a function
   useEffect(()=>
@@ -25,6 +26,14 @@ const [activities,setActivities]=useState<Activity[]>([]);
       axios.get<Activity[]>("http://localhost:5000/api/activities").then(response =>{setActivities(response.data)})
     },[])
 
+    function handleSelectActivity(id:string)
+    {
+      setselectedActivity(activities.find(activityobject=>activityobject.id===id))
+    }
+    function handleCanceledSelectActivity()
+    {
+      setselectedActivity(undefined);
+    }
 
   return (
     <Fragment>
@@ -33,7 +42,7 @@ const [activities,setActivities]=useState<Activity[]>([]);
 
 <Container style={{marginTop:"7em"}}>
 {ducks.map(duck=>(<DuckItem duck={duck}/>))}
-    <ActivityDashboard activities={activities}/>
+    <ActivityDashboard activities={activities} selectedActivity={selectedActivity}  selectActivity={handleSelectActivity}  cancelSelectActivity={handleCanceledSelectActivity}/>
     </Container>
     </Fragment>
   )
