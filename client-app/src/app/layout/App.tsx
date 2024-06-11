@@ -2,13 +2,14 @@
 import { Fragment, useEffect, useState } from 'react';
 import DuckItem from './DuckItem.tsx'
 import { ducks } from './demo'
-import axios from 'axios';
+
 import { Container} from 'semantic-ui-react';
 import type {Activity} from './interfaces/Activity';
 import Navbar from './navbar.tsx';
 import ActivityDashboard from '../../features/activities/dashboard/ActivitiesDashboard.tsx';
-import {v4 as uuid} from 'uuid'
-
+import {v4 as uuid} from 'uuid';
+import agent from '../api/agent.ts'
+import LoadingComponent from './loadingComponent.tsx';
 
 function App() {
 
@@ -19,12 +20,21 @@ function App() {
 const [activities,setActivities]=useState<Activity[]>([]);
 const [selectedActivity, setselectedActivity]=useState<Activity| undefined>(undefined);
 const [editMode, setEditMode]=useState(false);
-  
+const [loading, setLoading]=useState(true);
+const [submitting, setSubmitting]= useState(false);
+
+
   //accepts a function
   useEffect(()=>
     {
       //.then describes what happens once the response has been returned
-      axios.get<Activity[]>("http://localhost:5000/api/activities").then(response =>{setActivities(response.data)})
+      agent.Activities.list().then(response => {
+        let activities:Activity[]=[];
+        response.forEach(activity => {activity.date=activity.date.split("T")[0];
+        activities.push(activity);})
+        setActivities(activities);
+        setLoading(false);
+      })
     },[])
 
    
@@ -52,18 +62,50 @@ const [editMode, setEditMode]=useState(false);
 
     function handleCreateOrEditActivity(activity:Activity)
     {
-      activity.id? setActivities([...activities.filter(x=>x.id !== activity.id), {...activity, id:uuid()}]) // check whether activity has id that is not undefined, and then filkters out any existing activity withe the same id. it then adds the new activity object ti the new array
-      :setActivities([...activities, activity])
-      setEditMode(false)
-      setselectedActivity(activity)
-    }
+      setSubmitting(true);
+      if (activity.id)
+          { //if the id is found then we are editing teh activity. if the id is new tehn we are creating a new activity
+            agent.Activities.update(activity).then(()=> {
+            setActivities([...activities.filter(x=>x.id !== activity.id), {...activity, id:uuid()}]);
+            setselectedActivity(activity)
+            setEditMode(false);
+            setSubmitting(false);
+            })
+          }
+      else{
+            activity.id=uuid();
+            agent.Activities.create(activity).then(()=>
+            {
+              setActivities([...activities, activity])
+              setselectedActivity(activity)
+              setEditMode(false);
+              setSubmitting(false);
+            })
+        }
+      }
 
 
     function handleDeleteActivity(id:string)
     {
-      setActivities([...activities.filter(x => x.id!==id)])
+      setSubmitting(true);
+      agent.Activities.delete(id).then(()=>
+      {  
+        setActivities([...activities.filter(x => x.id!==id)])
+        setEditMode(false);
+        setSubmitting(false);
+      })
     }
+      
 
+
+   
+
+
+
+
+
+
+    if (loading) return <LoadingComponent content="Loading app"/>
 
   return (
     <Fragment>
@@ -82,6 +124,7 @@ const [editMode, setEditMode]=useState(false);
     closeForm={handleFormClose}
     createOrEdit={handleCreateOrEditActivity}
     deleteActivity={handleDeleteActivity}
+    submitting={submitting}
     />
     </Container>
     </Fragment>
