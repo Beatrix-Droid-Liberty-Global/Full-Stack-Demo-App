@@ -1,6 +1,5 @@
 
 import { SyntheticEvent, useState } from "react";
-import { Activity } from "../app/layout/interfaces/Activity";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { useStore } from "../app/stores/store";
 import { observer } from "mobx-react-lite";
@@ -22,7 +21,7 @@ export default observer(function ActivityList()
     return (
         <Segment>
                 <Item.Group divided>
-                    {activityStore.activities.map(activity =>(
+                    {activityStore.ActivitiesByDate.map(activity =>(
                         <Item key={activity.id}>
                             <Item.Content>
                                 <Item.Header as="a">{activity.title}</Item.Header>
@@ -40,8 +39,7 @@ export default observer(function ActivityList()
                                             content="Delete" 
                                             color="red" 
                                             loading={activityStore.loading && target===activity.id} 
-                                            onClick={(event)=>handleActivityDelete(event, activity.id)}
-                                            />
+                                            onClick={(event)=>handleActivityDelete(event, activity.id)}/>
                                     <Label basic coontent={activity.category}></Label>
                                 </Item.Extra>
 

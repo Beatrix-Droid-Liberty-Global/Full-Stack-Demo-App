@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from "react";
 import { Form, Segment, Button } from "semantic-ui-react";
-import { Activity } from "../../../app/layout/interfaces/Activity";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 
